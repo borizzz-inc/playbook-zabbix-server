@@ -1,0 +1,12 @@
+---
+- hosts: zabbix-server
+  sudo: yes
+  vars_files:
+    - vars/default.yml
+    - vars/{{server_env}}.yml
+  roles:
+          - { role: postgresql, tags: ['postgresql'] }
+          #- { role: zabbix, tags: ['zabbix'] }
+          - { role: zabbix_server, tags: ['zabbix_server'] }
+
+  tags: zabbix_server

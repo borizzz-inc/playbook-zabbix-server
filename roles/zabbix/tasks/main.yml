@@ -1,0 +1,12 @@
+- name: install zabbix_nginx.conf pkg
+  action: apt pkg=zabbix-agent
+
+- name: copy zabbix_agentd.conf
+  template: 
+    src: zabbix_agentd.conf
+    dest: /etc/zabbix/zabbix_agentd.conf
+  register: zabbix_conf
+
+- name: 'zabbix_nginx.conf | restart service'
+  service: name=zabbix-agent state=restarted
+  when: zabbix_conf.changed

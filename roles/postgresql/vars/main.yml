@@ -1,0 +1,6 @@
+---
+postgres_version: 9.6
+postgres_host: localhost
+
+#db_name: miliproduction
+#db_user: ubuntu

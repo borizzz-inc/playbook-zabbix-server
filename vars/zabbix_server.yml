@@ -1,0 +1,4 @@
+---
+db_name: zabbix
+db_user: tvil
+#pghba: pg_hba.miliproduction2

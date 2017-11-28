@@ -1,0 +1,89 @@
+
+
+- name: Update all packages to the latest version
+  apt:
+    upgrade: dist
+
+
+- name: install packages
+  apt: name={{item}} state=present update_cache=yes
+  with_items:
+    - php-fpm
+    - php-pgsql
+    - php-gd
+    - php-cgi
+    - php-pear
+    - php-mcrypt
+    - php-common
+    - nginx
+    - php-mbstring
+    - php-bcmath
+    - snmp
+    - snmpd
+    - bc
+    - curl
+  tags: zabbixx
+
+- name: Install zabbix server
+  apt:
+    deb: http://repo.zabbix.com/zabbix/3.4/debian/pool/main/z/zabbix/zabbix-server-pgsql_3.4.4-2+stretch_amd64.deb
+  tags: zabbixx
+- name: Install zabbix proxy server
+  apt:
+    deb: http://repo.zabbix.com/zabbix/3.4/debian/pool/main/z/zabbix/zabbix-proxy-pgsql_3.4.4-2+stretch_amd64.deb
+  tags: zabbixx
+
+
+- name: Install zabbix frontend php
+  apt:
+    deb: http://repo.zabbix.com/zabbix/3.4/debian/pool/main/z/zabbix/zabbix-frontend-php_3.4.4-2+stretch_all.deb
+  tags: zabbixx
+
+
+
+
+
+
+- file:
+    path: /var/log/nginx/error.log
+    owner: ubuntu
+    group: ubuntu
+    mode: 0644
+
+- name: copy php.ini
+  template:
+    src: php.ini
+    dest: /etc/php/7.0/fpm/php.ini
+  tags: zabbixz
+
+
+
+#- name: copy zabbix_server.conf
+#  template:
+#    src: zabbix_server.conf
+#    dest: /etc/zabbix/zabbix_server.conf
+
+#- name: 'nginx | check config'
+#  command: 'test -f /etc/nginx/sites-enabled/nginx_https.conf'
+#  register: nginx_config_copied
+#  ignore_errors: yes
+
+#- name: 'nginx | createdir'
+#  shell: 'rm /etc/nginx/sites-enabled/default; mkdir -p etc/nginx/sites-enabled/'
+#  when: nginx_config_copied|failed
+
+#- name: 'nginx | copy config'
+#  template:
+#    src: nginx_https.conf
+#    dest: /etc/nginx/sites-enabled/zabbix.conf
+#    owner: root
+#    group: root
+#    mode: 0644
+#  tags: cc
+
+- name: zabbix-server restart
+  service: name=zabbix-server state=restarted enabled=yes
+
+- name: nginx restart
+  service: name=nginx state=restarted enabled=yes
+

@@ -1,0 +1,8 @@
+[ovirt:children]
+ovirt-services
+
+[ovirt-services]
+zabbix-server   ansible_host=10.20.30.43 ansible_ssh_user=root   server_env=zabbix_server    ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[all:vars]
+
